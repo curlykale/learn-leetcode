@@ -5,14 +5,15 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author kale
  * @since 2019-03-31
  */
-public class TwoSum {
-    private static Logger logger = Logger.getLogger("TwoSum");
+public class TwoSumTest {
+    private static Logger logger = Logger.getLogger("TwoSumTest");
 
     @Test
     public void twoSumTest() {
@@ -22,8 +23,11 @@ public class TwoSum {
         int[] result = twoSum(nums, target);
         Long end = System.currentTimeMillis();
         long ret = end - start;
-        logger.info("耗时：{}"+String.valueOf(ret));
-        logger.info(JSON.toJSONString(result));
+        if (logger.isLoggable(Level.INFO)) {
+            logger.info("耗时：{}" + ret);
+            logger.info(JSON.toJSONString(result));
+        }
+
     }
 
 
@@ -45,8 +49,8 @@ public class TwoSum {
      * @param target 和
      * @return int数组
      */
-    public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> map = new HashMap<>();
+    private int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>(16);
         for (int i = 0; i < nums.length; i++) {
             map.put(nums[i], i);
         }
