@@ -1,4 +1,4 @@
-package cn.curlykale.leetcode.removeduplicate;
+package cn.curlykale.leetcode;
 
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
