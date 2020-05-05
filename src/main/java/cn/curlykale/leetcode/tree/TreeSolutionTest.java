@@ -107,6 +107,66 @@ public class TreeSolutionTest {
         logger.info(JSON.toJSONString(list));
     }
 
+    @Test
+    public void testFlatten() {
+        int[] nums = new int[]{1, 2, 5, 3, 4, 0, 6};
+        TreeNode treeNode = array2tree(nums, 0);
+        logger.info(JSON.toJSONString(treeArray(treeNode)));
+        flatten(treeNode);
+        logger.info(JSON.toJSONString(treeArray(treeNode)));
+    }
+
+    /**
+     * 给定一个二叉树，原地将它展开为链表。
+     * <p>
+     * 例如，给定二叉树
+     * <p>
+     * 1
+     * / \
+     * 2   5
+     * / \   \
+     * 3   4   6
+     * 将其展开为：
+     * <p>
+     * 1
+     * \
+     * 2
+     * \
+     * 3
+     * \
+     * 4
+     * \
+     * 5
+     * \
+     * 6
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list
+     *
+     * @param root treeNode
+     */
+    public void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        //将根节点的左子树变成链表
+        flatten(root.left);
+        //将根节点的右子树变成链表
+        flatten(root.right);
+        TreeNode temp = root.right;
+        //把树的右边换成左边的链表
+        root.right = root.left;
+        //记得要将左边置空
+        root.left = null;
+        //找到树的最右边的节点
+        while (root.right != null) {
+            root = root.right;
+        }
+        //把右边的链表接到刚才树的最右边的节点
+        root.right = temp;
+    }
+
+
     /**
      * 给定一个二叉树，返回它的中序 遍历。
      * <p>
@@ -120,8 +180,9 @@ public class TreeSolutionTest {
      * 3
      * <p>
      * 输出: [1,3,2]
-     *
+     * <p>
      * https://leetcode-cn.com/problems/binary-tree-inorder-traversal/
+     *
      * @param root treeNode
      * @return list
      */
