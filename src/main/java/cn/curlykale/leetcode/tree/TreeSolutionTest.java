@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -124,28 +125,66 @@ public class TreeSolutionTest {
     }
 
     /**
+     * 根据一棵树的前序遍历与中序遍历构造二叉树。
      *
+     * 注意:
+     * 你可以假设树中没有重复的元素。
+     *
+     * 例如，给出
+     *
+     * 前序遍历 preorder = [3,9,20,15,7]
+     * 中序遍历 inorder = [9,3,15,20,7]
+     * 返回如下的二叉树：
+     *
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal
+     * @param preorder 前序遍历数组
+     * @param inorder 中序遍历数组
+     * @return treenode
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length == 0 || inorder.length == 0) {
+            return null;
+        }
+        TreeNode treeNode = new TreeNode(preorder[0]);
+        for (int i = 0; i < inorder.length; i++) {
+            if (preorder[0] == inorder[i]) {
+                treeNode.left = buildTree(Arrays.copyOfRange(preorder, 1, i + 1), Arrays.copyOfRange(inorder, 0, i));
+                treeNode.right = buildTree(Arrays.copyOfRange(preorder, i + 1, preorder.length), Arrays.copyOfRange(inorder, i + 1, preorder.length));
+                break;
+            }
+        }
+        return treeNode;
+    }
+
+    /**
      * 给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
-     *
+     * <p>
      * 示例:
-     *
+     * <p>
      * 输入: 3
      * 输出: 5
      * 解释:
      * 给定 n = 3, 一共有 5 种不同结构的二叉搜索树:
-     *
-     *    1         3     3      2      1
-     *     \       /     /      / \      \
-     *      3     2     1      1   3      2
-     *     /     /       \                 \
-     *    2     1         2                 3
-     *
+     * <p>
+     * 1         3     3      2      1
+     * \       /     /      / \      \
+     * 3     2     1      1   3      2
+     * /     /       \                 \
+     * 2     1         2                 3
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/unique-binary-search-trees
-     *
-     *  卡特兰数 公式
+     * <p>
+     * 卡特兰数 公式
      * G(n) = G(0)*G(n-1)+G(1)*G(n-2)+...+G(n-1)*G(0)G(n)=G(0)∗G(n−1)+G(1)∗(n−2)+...+G(n−1)∗G(0)
-     *
+     * <p>
      * 作者：guanpengchn
      * 链接：https://leetcode-cn.com/problems/unique-binary-search-trees/solution/hua-jie-suan-fa-96-bu-tong-de-er-cha-sou-suo-shu-b/
      *
@@ -153,7 +192,7 @@ public class TreeSolutionTest {
      * @return 组成的二叉搜索树数量
      */
     public int numTrees(int n) {
-        int[] dp = new int[n+1];
+        int[] dp = new int[n + 1];
         dp[0] = 1;
         dp[1] = 1;
         for (int i = 2; i < n + 1; i++) {
