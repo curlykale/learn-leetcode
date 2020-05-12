@@ -4,9 +4,7 @@ package cn.curlykale.leetcode.tree;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -82,8 +80,8 @@ public class TreeSolutionTest {
     @Test
     public void testPathSum() {
         int[] nums = new int[]{10, 5, -3, 3, 2, 0, 11, 3, -2, 0, 1};
-        int sum = 8;
-        int num = pathSum(array2tree(nums, 0), sum);
+        int sums = 8;
+        int num = pathSum(array2tree(nums, 0), sums);
         logger.info(String.valueOf(num));
     }
 
@@ -124,28 +122,156 @@ public class TreeSolutionTest {
         logger.info(String.valueOf(numTrees));
     }
 
+    @Test
+    public void testLowestCommonAncestor() {
+        int[] nums = new int[]{3, 5, 1, 6, 2, 0, 8, 0, 0, 7, 4};
+        TreeNode treeNode = array2tree(nums, 0);
+        TreeNode p = new TreeNode(5);
+        TreeNode q = new TreeNode(4);
+        TreeNode ancestor = lowestCommonAncestor(treeNode, p, q);
+        logger.info(JSON.toJSONString(treeArray(ancestor)));
+    }
+
+
+    @Test
+    public void testLevelOrder() {
+        Integer[] nums = new Integer[]{1, 2, 3, 4, null, null, 5};
+        TreeNode treeNode = array2tree(nums, 0);
+        List<List<Integer>> lists = levelOrder(treeNode);
+        logger.info(JSON.toJSONString(lists));
+    }
+
+
+    /**
+     * 102. 二叉树的层序遍历
+     * 给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+     * <p>
+     *  
+     * <p>
+     * 示例：
+     * 二叉树：[3,9,20,null,null,15,7],
+     * <p>
+     * 3
+     * / \
+     * 9  20
+     * /  \
+     * 15   7
+     * 返回其层次遍历结果：
+     * <p>
+     * [
+     * [3],
+     * [9,20],
+     * [15,7]
+     * ]
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/binary-tree-level-order-traversal
+     *
+     * @param root treeNode
+     * @return list
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> levelList = new ArrayList<>();
+        if (root == null) {
+            return levelList;
+        }
+        LinkedList<TreeNode> qList = new LinkedList<>();
+        qList.add(root);
+        while (!qList.isEmpty()) {
+            int size = qList.size();
+            List<Integer> tmpList = new ArrayList<>();
+            for (int i = 0; i < size; i++) {
+                TreeNode node = qList.remove();
+                tmpList.add(node.val);
+                if (node.left != null) {
+                    qList.add(node.left);
+                }
+                if (node.right != null) {
+                    qList.add(node.right);
+                }
+            }
+            levelList.add(tmpList);
+        }
+        return levelList;
+    }
+
+
+    /**
+     * 思路
+     * <p>
+     * 我们可以用哈希表存储所有节点的父节点，然后我们就可以利用节点的父节点信息从 p 结点开始不断往上跳，并记录已经访问过的节点，
+     * 再从 q 节点开始不断往上跳，如果碰到已经访问过的节点，那么这个节点就是我们要找的最近公共祖先。
+     * <p>
+     * 算法
+     * <p>
+     * 从根节点开始遍历整棵二叉树，用哈希表记录每个节点的父节点指针。
+     * 从 p 节点开始不断往它的祖先移动，并用数据结构记录已经访问过的祖先节点。
+     * 同样，我们再从 q 节点开始不断往它的祖先移动，如果有祖先已经被访问过，即意味着这是 p 和 q 的深度最深的公共祖先，即 LCA 节点。
+     * <p>
+     * <p>
+     * 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+     * <p>
+     * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+     * <p>
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree
+     */
+    Map<Integer, TreeNode> parentMap = new HashMap<>();
+    List<Integer> visited = new ArrayList<>();
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) {
+            return null;
+        }
+        dfsAncestor(root);
+        while (p != null) {
+            visited.add(p.val);
+            p = parentMap.get(p.val);
+        }
+        while (q != null) {
+            if (visited.contains(q.val)) {
+                return q;
+            }
+            q = parentMap.get(q.val);
+        }
+        return null;
+    }
+
+    public void dfsAncestor(TreeNode root) {
+        if (root.left != null) {
+            parentMap.put(root.left.val, root);
+            dfsAncestor(root.left);
+        }
+        if (root.right != null) {
+            parentMap.put(root.right.val, root);
+            dfsAncestor(root.right);
+        }
+    }
+
+
     /**
      * 根据一棵树的前序遍历与中序遍历构造二叉树。
-     *
+     * <p>
      * 注意:
      * 你可以假设树中没有重复的元素。
-     *
+     * <p>
      * 例如，给出
-     *
+     * <p>
      * 前序遍历 preorder = [3,9,20,15,7]
      * 中序遍历 inorder = [9,3,15,20,7]
      * 返回如下的二叉树：
-     *
-     *     3
-     *    / \
-     *   9  20
-     *     /  \
-     *    15   7
-     *
+     * <p>
+     * 3
+     * / \
+     * 9  20
+     * /  \
+     * 15   7
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal
+     *
      * @param preorder 前序遍历数组
-     * @param inorder 中序遍历数组
+     * @param inorder  中序遍历数组
      * @return treenode
      */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -405,7 +531,9 @@ public class TreeSolutionTest {
     private int numbers = 0;
 
     public int pathSum(TreeNode root, int sum) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         nodeSum(root, sum);
         pathSum(root.left, sum);
         pathSum(root.right, sum);
@@ -413,7 +541,9 @@ public class TreeSolutionTest {
     }
 
     public void nodeSum(TreeNode root, int sum) {
-        if (root == null) return;
+        if (root == null) {
+            return;
+        }
         sum -= root.val;
         if (sum == 0) {
             numbers++;
@@ -569,6 +699,22 @@ public class TreeSolutionTest {
             treeNode = new TreeNode(trees[num]);
             treeNode.left = array2tree(trees, 2 * num + 1);
             treeNode.right = array2tree(trees, 2 * num + 2);
+        }
+        return treeNode;
+    }
+
+
+    private TreeNode array2tree(Integer[] trees, int num) {
+        TreeNode treeNode = null;
+        if (num < trees.length) {
+            if (trees[num] == null) {
+                treeNode = null;
+            } else {
+                treeNode = new TreeNode(trees[num]);
+                treeNode.left = array2tree(trees, 2 * num + 1);
+                treeNode.right = array2tree(trees, 2 * num + 2);
+            }
+
         }
         return treeNode;
     }
