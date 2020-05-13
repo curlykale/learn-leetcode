@@ -16,20 +16,10 @@ import java.util.logging.Logger;
 public class TreeSolutionTest {
     private Logger logger = Logger.getLogger("TreeSolution");
 
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) {
-            this.val = x;
-        }
-    }
-
     @Test
     public void testCovertTree() {
         int[] nums = new int[]{-10, -3, 0, 5, 9, 11};
-        TreeNode td = array2tree(nums, 0);
+        TreeNode td = TreeUtil.array2tree(nums, 0);
         Integer[] trees = treeArray(td);
         logger.info(JSON.toJSONString(trees));
     }
@@ -46,7 +36,7 @@ public class TreeSolutionTest {
     @Test
     public void testMirrorTree() {
         int[] nums = new int[]{4, 2, 7, 1, 3, 6, 9};
-        TreeNode td = array2tree(nums, 0);
+        TreeNode td = TreeUtil.array2tree(nums, 0);
         TreeNode treeNode = mirrorTree(td);
         Integer[] trees = treeArray(treeNode);
         logger.info(JSON.toJSONString(trees));
@@ -54,7 +44,7 @@ public class TreeSolutionTest {
 
     private Integer[] treeArray(TreeNode treeNode) {
         List<Integer> trees = new ArrayList<>();
-        tree2array(treeNode, trees, 0);
+        TreeUtil.tree2array(treeNode, trees, 0);
         return trees.toArray(new Integer[0]);
     }
 
@@ -63,7 +53,7 @@ public class TreeSolutionTest {
     public void testMergeTrees() {
         int[] nums1 = new int[]{1, 3, 2, 5};
         int[] nums2 = new int[]{2, 1, 3, 0, 4, 0, 7};
-        TreeNode treeNode = mergeTrees(array2tree(nums1, 0), array2tree(nums2, 0));
+        TreeNode treeNode = mergeTrees(TreeUtil.array2tree(nums1, 0), TreeUtil.array2tree(nums2, 0));
         Integer[] trees = treeArray(treeNode);
         logger.info(JSON.toJSONString(trees));
     }
@@ -72,7 +62,7 @@ public class TreeSolutionTest {
     @Test
     public void testBST() {
         int[] nums = new int[]{5, 2, 8, 1, 3, 7, 9};
-        TreeNode treeNode = convertBST(array2tree(nums, 0));
+        TreeNode treeNode = convertBST(TreeUtil.array2tree(nums, 0));
         Integer[] trees = treeArray(treeNode);
         logger.info(JSON.toJSONString(trees));
     }
@@ -81,35 +71,35 @@ public class TreeSolutionTest {
     public void testPathSum() {
         int[] nums = new int[]{10, 5, -3, 3, 2, 0, 11, 3, -2, 0, 1};
         int sums = 8;
-        int num = pathSum(array2tree(nums, 0), sums);
+        int num = pathSum(TreeUtil.array2tree(nums, 0), sums);
         logger.info(String.valueOf(num));
     }
 
     @Test
     public void testSymmetric() {
         int[] nums = new int[]{1, 2, 2, 3, 4, 4, 3};
-        boolean symmetric = isSymmetric(array2tree(nums, 0));
+        boolean symmetric = isSymmetric(TreeUtil.array2tree(nums, 0));
         logger.info(String.valueOf(symmetric));
     }
 
     @Test
     public void testDiameter() {
         int[] nums = new int[]{1, 2, 3, 4, 5};
-        int diameter = diameterOfBinaryTree(array2tree(nums, 0));
+        int diameter = diameterOfBinaryTree(TreeUtil.array2tree(nums, 0));
         logger.info(String.valueOf(diameter));
     }
 
     @Test
     public void testInorder() {
         int[] nums = new int[]{1, 0, 2, 3};
-        List<Integer> list = inorderTraversal(array2tree(nums, 0));
+        List<Integer> list = inorderTraversal(TreeUtil.array2tree(nums, 0));
         logger.info(JSON.toJSONString(list));
     }
 
     @Test
     public void testFlatten() {
         int[] nums = new int[]{1, 2, 5, 3, 4, 0, 6};
-        TreeNode treeNode = array2tree(nums, 0);
+        TreeNode treeNode = TreeUtil.array2tree(nums, 0);
         logger.info(JSON.toJSONString(treeArray(treeNode)));
         flatten(treeNode);
         logger.info(JSON.toJSONString(treeArray(treeNode)));
@@ -125,7 +115,7 @@ public class TreeSolutionTest {
     @Test
     public void testLowestCommonAncestor() {
         int[] nums = new int[]{3, 5, 1, 6, 2, 0, 8, 0, 0, 7, 4};
-        TreeNode treeNode = array2tree(nums, 0);
+        TreeNode treeNode = TreeUtil.array2tree(nums, 0);
         TreeNode p = new TreeNode(5);
         TreeNode q = new TreeNode(4);
         TreeNode ancestor = lowestCommonAncestor(treeNode, p, q);
@@ -136,7 +126,7 @@ public class TreeSolutionTest {
     @Test
     public void testLevelOrder() {
         Integer[] nums = new Integer[]{1, 2, 3, 4, null, null, 5};
-        TreeNode treeNode = array2tree(nums, 0);
+        TreeNode treeNode = TreeUtil.array2tree(nums, 0);
         List<List<Integer>> lists = levelOrder(treeNode);
         logger.info(JSON.toJSONString(lists));
     }
@@ -431,7 +421,7 @@ public class TreeSolutionTest {
      * 链接：https://leetcode-cn.com/problems/diameter-of-binary-tree
      * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
      */
-    public int maxNum = 0;
+    public int  maxNum = 0;
 
     public int diameterOfBinaryTree(TreeNode root) {
         dfs(root);
@@ -670,54 +660,7 @@ public class TreeSolutionTest {
         }
         return num;
     }
-
-    /**
-     * 树 -》数组
-     *
-     * @param treeNode 树
-     * @param trees    数组
-     * @param i        起始索引
-     */
-    private void tree2array(TreeNode treeNode, List<Integer> trees, int i) {
-        if (null != treeNode) {
-            trees.add(treeNode.val);
-            tree2array(treeNode.left, trees, 2 * i + 1);
-            tree2array(treeNode.right, trees, 2 * i + 2);
-        }
-    }
-
-    /**
-     * 数组 -》 树
-     *
-     * @param trees 数组
-     * @param num   起始做引
-     * @return 树
-     */
-    private TreeNode array2tree(int[] trees, int num) {
-        TreeNode treeNode = null;
-        if (num < trees.length) {
-            treeNode = new TreeNode(trees[num]);
-            treeNode.left = array2tree(trees, 2 * num + 1);
-            treeNode.right = array2tree(trees, 2 * num + 2);
-        }
-        return treeNode;
-    }
-
-
-    private TreeNode array2tree(Integer[] trees, int num) {
-        TreeNode treeNode = null;
-        if (num < trees.length) {
-            if (trees[num] == null) {
-                treeNode = null;
-            } else {
-                treeNode = new TreeNode(trees[num]);
-                treeNode.left = array2tree(trees, 2 * num + 1);
-                treeNode.right = array2tree(trees, 2 * num + 2);
-            }
-
-        }
-        return treeNode;
-    }
+    
 
     /**
      * 给定有序数组: [-10,-3,0,5,9],
