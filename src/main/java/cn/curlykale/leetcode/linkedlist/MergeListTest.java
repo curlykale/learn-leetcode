@@ -24,13 +24,21 @@ public class MergeListTest {
         head1.next = new ListNode(2);
         head1.next.next = new ListNode(3);
         ListNode listNode = mergeTwoLists(head, head1);
-//        ListNode listNode2 = mergeTwoLists2(head, head1);
-        StringBuilder sb = new StringBuilder();
-        while (listNode != null) {
-            sb.append(listNode.val).append(">");
-            listNode = listNode.next;
-        }
-        logger.info(sb.toString());
+        String sb = ListUtil.nodeString(listNode);
+        logger.info(sb);
+    }
+
+    @Test
+    public void testReverse2() {
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        ListNode head1 = new ListNode(1);
+        head1.next = new ListNode(2);
+        head1.next.next = new ListNode(3);
+        ListNode listNode = mergeTwoLists2(head, head1);
+        String sb = ListUtil.nodeString(listNode);
+        logger.info(sb);
     }
 
 

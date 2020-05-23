@@ -26,12 +26,8 @@ public class SortListTest {
         head1.next.next = head2;
         head.next.next = head1;
         ListNode listNode = sortList(head);
-        StringBuilder sb = new StringBuilder();
-        while (listNode != null) {
-            sb.append(listNode.val).append(">");
-            listNode = listNode.next;
-        }
-        logger.info(sb.toString());
+        String sb = ListUtil.nodeString(listNode);
+        logger.info(sb);
     }
 
     /**
