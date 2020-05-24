@@ -23,7 +23,8 @@ public class HasCycleTest {
         head.next.next = node;
         node.next.next = head.next;
         boolean hasCycle = hasCycle(head);
-        logger.info(String.valueOf(hasCycle));
+        String sb = String.valueOf(hasCycle);
+        logger.info(sb);
     }
 
     /**
@@ -32,7 +33,7 @@ public class HasCycleTest {
      * @param head listNode
      * @return boolean
      */
-    public boolean hasCycle(ListNode head) {
+    private boolean hasCycle(ListNode head) {
         if (head == null || head.next == null) {
             return false;
         }
