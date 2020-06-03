@@ -17,7 +17,7 @@ public class SearchRangeTest {
 
 
     @Test
-    public void testRob() {
+    public void testSearchRange() {
         int[] nums = new int[]{3, 3, 3, 3};
         int target = 3;
         int[] td = searchRange(nums, target);
